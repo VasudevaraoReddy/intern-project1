@@ -1,6 +1,6 @@
 # Intership project
 
-simple login and registration application with password hashing
+Advanced login and registration application with password hashing
 
 # Features
 
