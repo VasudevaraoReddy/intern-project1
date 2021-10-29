@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Redirect } from "react-router";
+import Loader from 'react-loader-spinner'
 import Axios from "axios";
 import { store } from "../../App";
 import "./index.css";
@@ -9,23 +10,29 @@ const Login = () => {
   const [passwordEnter, setPasswordEnter] = useState("");
   const [token, setToken] = useContext(store);
   const [msg, setMsg] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false)
 
   const onClickLogin = (e) => {
     e.preventDefault();
-   if(usernameEnter!=""&&passwordEnter!=""){
-    Axios.post("https://login-v-server.herokuapp.com/login", {
-      username: usernameEnter,
-      password: passwordEnter,
-    }).then((response) => {
-      setToken(response.data.token);
-      setMsg(response.data.userMsg);
-    });
-    setUserNameEnter("");
-    setPasswordEnter("");
-   }else{
-    setMsg("Please fill all fields");
-   }
+    if (usernameEnter !== "" && passwordEnter !== "") {
+      Axios.post("https://login-v-server.herokuapp.com/login", {
+        username: usernameEnter,
+        password: passwordEnter,
+      }).then((response) => {
+        setToken(response.data.token);
+        setMsg(response.data.userMsg);
+        setIsLoading(false)
+      });
+      setUserNameEnter("");
+      setPasswordEnter("");
+      if (msg != "") {
+        setIsLoading(true)
+      } else {
+        setIsLoading(true)
+      }
+    } else {
+      setMsg("Please fill all fields");
+    }
   };
 
   if (token != null) {
@@ -39,7 +46,7 @@ const Login = () => {
           className="input-box"
           type="text"
           value={usernameEnter}
-          placeholder="Email"
+          placeholder="Username"
           onChange={(e) => setUserNameEnter(e.target.value)}
         />
         <input
@@ -53,7 +60,11 @@ const Login = () => {
           Login
         </button>
       </form>
-      <p className="msg_n">{msg}</p>
+      {isLoading ? (
+        <Loader type="Oval" color="blue" height={50} width={50} />
+      ) : (
+        <p className="msg_n">{msg}</p>
+      )}
     </div>
   );
 };
