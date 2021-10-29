@@ -8,6 +8,7 @@ Advanced login and registration application with password hashing
 - User login
 - User details
 - User logout
+- Spinner(When login and registration)
 
 # Extra features 
 
