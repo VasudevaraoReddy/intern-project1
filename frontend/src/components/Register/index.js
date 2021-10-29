@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Axios from "axios";
+import Loader from 'react-loader-spinner'
 import "./index.css";
 
 const Register = () => {
@@ -8,10 +9,11 @@ const Register = () => {
   const [emailReg, setEmailReg] = useState("");
   const [fullnameReg, setFullnameReg] = useState("");
   const [msg, setMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
 
   const register = (e) => {
     e.preventDefault();
-    if(usernameReg!="" && passwordReg!=""&& emailReg!="" &&fullnameReg!=""){
+    if (usernameReg !== "" && passwordReg !== "" && emailReg !== "" && fullnameReg !== "") {
       Axios.post("https://login-v-server.herokuapp.com/register", {
         username: usernameReg,
         password: passwordReg,
@@ -19,12 +21,18 @@ const Register = () => {
         email: emailReg,
       }).then((response) => {
         setMsg(response.data.registrationMsg);
+        setIsLoading(false)
       });
       setUsernameReg("");
       setPasswordReg("");
       setEmailReg("");
       setFullnameReg("");
-    }else{
+      if(msg != ""){
+        setIsLoading(true)
+      }else{
+        setIsLoading(true)
+      }
+    } else {
       setMsg("Please fill all fields");
     }
   };
@@ -73,7 +81,11 @@ const Register = () => {
           Register
         </button>
       </form>
-      <p className="msg_n">{msg}</p>
+      {isLoading ? (
+        <Loader type="Oval" color="blue" height={50} width={50} />
+      ) : (
+        <p className="msg_n">{msg}</p>
+      )}
     </div>
   );
 };
